@@ -1,86 +1,88 @@
 #include <iostream>
-#include <algorithm>
 #include <vector>
-
+#include <queue>
+#include <memory.h>
+#include <string>
+#include <iomanip>
+#include <algorithm>
+#include <cmath>
+#include <stack>
+#include <regex>
+#include <map>
+#include <cstdlib>
 using namespace std;
 
-long long f[21]; // 1!~20! 까지 값을 저장할 변수
-bool check[21]; // 1~N까지의 숫자가 순열에 있는지 없는지 확인하는 변수
+int n, k;
+long long fact[21];
+bool check[21];
 
-int main()
+int main() 
 {
-    int N, cmd;
+	ios_base::sync_with_stdio(0);
+	cin.tie(0), cout.tie(0);
+	
+	cin >> n >> k;
 
-    cin >> N;
+	fact[0] = 1;
+	for (int i = 1; i <= n; i++)
+	{
+		fact[i] = i * fact[i - 1];
+	}
 
-    f[0] = 1;
+	if (k == 1)
+	{
+		vector<int> v(n);
 
-    // 팩토리얼 초기화
-    for (int i = 1; i < 21; i++)
-        f[i] = f[i - 1] * i;
+		long long Find;
+		cin >> Find;
+		for (int i = 0; i < n; i++) // 자릿수
+		{
+			for (int j = 1; j <= n; j++) // 해당 값 찾기
+			{
+				if (check[j]) continue;
 
-    cin >> cmd;
+				if (fact[n - i - 1] < Find)
+				{
+					Find -= fact[n - i - 1];
+				}
+				else
+				{
+					v[i] = j;
+					check[j] = 1;
+					break;
+				}
+			}
+		}
 
-    // 몇 번째 순열인지 출력하기.
-    if (cmd == 2)
-    {
-        vector<int> a(N);
+		for (auto s : v) cout << s << " ";
+		cout << '\n';
 
-        // 순열 입력
-        for (int i = 0; i < N; i++)
-            cin >> a[i];
+	}
+	else if (k == 2)
+	{
+		vector<int> v(n);
 
-        long long ans = 0;
+		for (int i = 0; i < n; i++)
+		{
+			cin >> v[i];
+		}
 
-        for (int i = 0; i < N; i++)
-        {
-            for (int j = 1; j < a[i]; j++)
-            {
-                // 1부터 해당하는 원소까지 팩토리얼 값을 늘려가며 더해준다.
-                if (check[j] == false)
-                    ans += f[N - i - 1];
-            }
-            // 순열에 존재하는 숫자는 있다고 표시해준다.
-            check[a[i]] = true;
-        }
+		long long res = 0;
 
-        cout << ans + 1 << "\n";
-    }
-    // k 번째 순열 출력하기
-    else
-    {
-        long long k;
+		for (int i = 0; i < n; i++) // 자릿수
+		{
+			for (int j = 1; j < v[i]; j++) //자리 해당 수
+			{
+				if (!check[j])
+				{
+					res += fact[n - i - 1];
+				}
+			}
+			check[v[i]] = 1;
+		}
 
-        cin >> k;
+		cout << res + 1;
+	}
 
-        vector<int> a(N);
 
-        // k번째 순열 찾는 과정
-        for (int i = 0; i < N; i++)
-        {
-            for (int j = 1; j <= N; j++)
-            {
-                // 순열에 이미 존재하는 숫자면 넘어간다
-                if (check[j] == true) continue;
-                // 팩토리얼 값이 k보다 작으면 k에서 팩토리얼 값을 빼준다
-                if (f[N - i - 1] < k)
-                {
-                    k -= f[N - i - 1];
-                }
-                // 팩토리얼 값이 k보다 크면 해당하는 원소의 숫자를 찾은 것. 
-                // a[i]에 저장하고 순열에 존재하는 숫자를 체크해준다
-                else
-                {
-                    a[i] = j;
-                    check[j] = true;
-                    break;
-                }
-            }
-        }
-
-        for (int i = 0; i < N; i++) cout << a[i] << " ";
-        cout << "\n";
-    }
-
-    return 0;
 }
