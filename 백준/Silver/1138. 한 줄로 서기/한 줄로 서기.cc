@@ -13,51 +13,6 @@
 using namespace std;
 
 int n;
-int arr[11];
-bool check[11];
-
-bool issame(vector<int> vec)
-{
-	for (int i = 0; i < vec.size(); i++)
-	{
-		int num = vec[i];
-		int bigger = 0;
-		for (int j = 0; j < i; j++)
-		{
-			if (vec[j] > num) bigger++;
-		}
-
-		if (arr[num] != bigger) return false;
-	}
-
-	return true;
-}
-
-void back(vector<int> vec, int index, int len)
-{
-	if (len == n)
-	{
-		if (issame(vec))
-		{
-			for (auto s : vec) cout << s << " ";
-			return;
-		}
-
-		return;
-	}
-
-	for (int i = 1; i <= n; i++)
-	{
-		if (!check[i])
-		{
-			vec.push_back(i);
-			check[i] = 1;
-			back(vec, i, len + 1);
-			check[i] = 0;
-			vec.pop_back();
-		}
-	}
-}
 
 int main() 
 {
@@ -65,13 +20,25 @@ int main()
 	cin.tie(0), cout.tie(0);
 	
 	cin >> n;
+	vector<int> v(n), res(n);
 
-	for (int i = 1; i <= n; i++)
+	for (int i = 0; i < n; i++)
 	{
-		cin >> arr[i];
+		cin >> v[i];
 	}
 
-	vector<int>v;
+	for (int i = 0; i < n; i++)
+	{
+		int index = 0;
+		while (v[i] != 0)
+		{
+			if(res[index] == 0) v[i]--;
+			index++;
+		}
 
-	back(v, 0, 0);
+		while(res[index] != 0) index++;
+		res[index] = i + 1;
+	}
+
+	for (auto s : res) cout << s << " ";
 }
