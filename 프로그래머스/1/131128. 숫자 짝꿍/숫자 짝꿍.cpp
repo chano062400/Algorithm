@@ -9,7 +9,7 @@ string solution(string X, string Y){
     string answer = "";
     for(auto s : X) xnum[s-'0']++;
     for(auto s : Y) ynum[s-'0']++;
-    
+
     vector<int> v;
     for(int i=0; i<=9; i++)
     {
@@ -22,16 +22,13 @@ string solution(string X, string Y){
             }
         }
     }
-    
+
     sort(v.begin(), v.end(), greater<int>());
-    
-    for(int i=0; i<v.size(); i++)
-    {
-       answer += to_string(v[i]); 
-    }
-    
+
+    for(auto s : v) answer += to_string(s);
+
     if(answer.length() == 0) answer = "-1";
     else if(answer[0] == '0') answer = "0";
-    
+
     return answer;
 }
