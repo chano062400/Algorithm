@@ -49,6 +49,7 @@ int main()
                 if(visited[h]) continue;
                 mul = i * j * h;
                 res = min(res, abs(n -mul));
+                if (n + 1 < mul) break;
             }
         }
     }
