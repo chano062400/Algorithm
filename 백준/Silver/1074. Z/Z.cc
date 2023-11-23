@@ -10,52 +10,40 @@
 #include <regex>
 #include <map>
 #include <cstdlib>
+#include <list>
 using namespace std;
 
-int n, r, c, res=0;
-int arr[10000];
-int main() 
+int n, r, c, res;
+
+void Search(int x, int y, int len)
 {
-	ios_base::sync_with_stdio(0);
-	cin.tie(0), cout.tie(0);
-	
-	cin >> n >> r >> c;
-	long long len = pow(2, n);
-	
-	r++;
-	c++;
+    if (x == r && y == c)
+    {
+        cout << res;
+        return;
+    }
 
-	while (len >= 2 )
-	{
-		int Pow = len / 2;
+    if (x + len > r && y + len > c && r >= x && c >= y)
+    {
+        Search(x, y, len / 2);
+        Search(x, y + len /2, len / 2);
+        Search(x + len / 2 , y, len / 2);
+        Search(x + len /2, y + len /2, len /2);
+    }
+    else
+    {
+        res += len * len;
+    }
+}
 
-		if (r > len / 2)
-		{
-			if (c > len / 2)
-			{
-				res += Pow * Pow * 3;
-			}
-			else
-			{
-				res += Pow * Pow * 2;
-			}
-		}
-		else
-		{
-			if (c > len / 2)
-			{
-				res += Pow * Pow * 1;
-			}
-			else
-				res += 0;
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0), cout.tie(0);
+       
+    cin >> n >> r >> c;
+    int len = pow(2, n);
 
+    Search(0, 0, len);
 
-		}
-		if (r > len / 2) r -= len / 2;
-		if (c > len / 2) c -= len / 2;
-		len /= 2;
-		
-	}
-
-	cout << res;
 }
