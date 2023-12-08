@@ -14,13 +14,38 @@
 using namespace std;
 
 int n, d, res=0;
-int dp[10001];
+int dist[10001];
 vector<pair<int, int>> v[10001];
 
-bool cmp(pair<int, int> p1, pair<int, int> p2)
+void dijkstra(int start)
 {
-    if (p1.first == p2.first) return p1.second < p2.second;
-    return p1.first < p2.first;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    pq.push({ 0,start });
+
+    while (!pq.empty())
+    {
+        int curdist = pq.top().first;
+        int cur = pq.top().second;
+        pq.pop();
+
+        for (int i = 0; i < v[cur].size(); i++)
+        {
+            int next = v[cur][i].second;
+            int nextdist = curdist + v[cur][i].first;
+            
+            if (nextdist < dist[next])
+            {
+                dist[next] = nextdist;
+                pq.push({ nextdist, next });
+            }
+        }
+
+        if (cur + 1 <= d && dist[cur + 1] > curdist)
+        {
+            dist[cur + 1] = curdist + 1;
+            pq.push({ curdist + 1, cur + 1 });
+        }
+    }
 }
 
 int main()
@@ -35,21 +60,12 @@ int main()
         int start, end, dist;
         cin >> start >> end >> dist;
         if (end > d || dist > end - start) continue;
-        v[end].push_back({ start,dist });
+        v[start].push_back({dist, end});
     }
+    
+    fill(dist, dist + 10001, 987654321);
 
-    sort(v->begin(), v->end(), cmp);
+    dijkstra(0);
 
-    dp[0] = 0;
-
-    for (int i = 1; i <= d; i++)
-    {
-        dp[i] = dp[i - 1] + 1;
-        for (int j = 0; j < v[i].size(); j++)
-        {
-            dp[i] = min(dp[i], dp[v[i][j].first] + v[i][j].second);
-        }
-    }
-
-    cout << dp[d];
+    cout << dist[d];
 }
