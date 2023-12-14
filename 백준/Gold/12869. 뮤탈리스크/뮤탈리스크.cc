@@ -14,42 +14,27 @@
 #include <sstream>
 using namespace std;
 
-int order[6][3] = { {9,3,1}, {9,1,3}, {3,9,1}, {3,1,9}, {1,9,3}, {1,3,9} };
 int health[3] = { 0, };
-int cnt[61][61][61];
+int order[6][3] = { {9,3,1}, {9,1,3}, {3,9,1}, {3,1,9}, {1,9,3}, {1,3,9} };
+int dp[61][61][61];
 
-struct hp
+int dfs(int x, int y, int z)
 {
-    int x, y, z;
-};
+    if (x == 0 && y == 0 && z == 0) return 0;
 
-void bfs()
-{
-    queue<hp> q;
-    q.push({ health[0], health[1], health[2] });
-    cnt[health[0]][health[1]][health[2]] = 0;
-    while (!q.empty())
+    if (x < 0) return dfs(0, y, z);
+    if (y < 0) return dfs(x, 0, z);
+    if (z < 0) return dfs(x, y, 0);
+
+    if (dp[x][y][z] != -1) return  dp[x][y][z];
+    dp[x][y][z] = 987654321;
+
+    for (int i = 0; i < 6; i++)
     {
-        int cx = q.front().x;
-        int cy = q.front().y;
-        int cz = q.front().z;
-        q.pop();
-
-        if (cx == 0 && cy == 0 && cz == 0) return;
-
-        for (int i = 0; i < 6; i++)
-        {
-            int nx = max(0, cx - order[i][0]);
-            int ny = max(0, cy - order[i][1]);
-            int nz = max(0, cz - order[i][2]);
-            
-            if (cnt[nx][ny][nz] == -1)
-            {
-                cnt[nx][ny][nz] = cnt[cx][cy][cz] + 1;
-                q.push({ nx,ny,nz });
-            }
-        }
+        dp[x][y][z] = min(dp[x][y][z], dfs(x - order[i][0], y - order[i][1], z - order[i][2]) + 1);
     }
+
+    return dp[x][y][z];
 }
 
 int main()
@@ -66,7 +51,6 @@ int main()
         cin >> health[i];
     }
 
-    memset(cnt, -1, sizeof(cnt));
-    bfs();
-    cout << cnt[0][0][0];
+    memset(dp, -1, sizeof(dp));
+    cout << dfs(health[0], health[1], health[2]);
 }
