@@ -6,7 +6,7 @@ using namespace std;
 int solution(string s)
 {
     int answer = 1;
-    stack<int> st;
+    stack<char> st;
     for(int i=0; i<s.length(); i++)
     {
         if(st.empty()) st.push(s[i]);
