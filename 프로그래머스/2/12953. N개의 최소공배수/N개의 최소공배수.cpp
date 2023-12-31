@@ -10,25 +10,10 @@ int gcd(int a, int b)
 }
 
 int solution(vector<int> arr) {
-    int answer = 0;
-    while(!arr.empty())
+    int answer = arr[0];
+    for(int i = 1; i<arr.size(); i++)
     {
-        int a, b;
-        if(answer == 0)
-        {
-            a = arr.back(); 
-            arr.pop_back();
-            b = arr.back();
-            answer = a * b / gcd(a,b);
-        }
-        else 
-        {
-            a = answer;
-            b = arr.back();
-            arr.pop_back();
-            
-            answer = a * b / gcd(a,b);
-        }
+        answer = answer * arr[i] / gcd(answer,arr[i]);
     }
     return answer;
 }
