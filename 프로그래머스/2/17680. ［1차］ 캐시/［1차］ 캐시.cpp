@@ -23,7 +23,7 @@ int solution(int cacheSize, vector<string> cities) {
     {
         for(auto& city : cities) city = lower(city);
         
-        list<string> cache; // 캐시    
+        vector<string> cache; // 캐시    
         
         for(int i=0; i<cities.size(); i++)
         {
