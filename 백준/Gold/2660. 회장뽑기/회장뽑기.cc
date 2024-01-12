@@ -15,8 +15,38 @@
 #include <bitset>
 using namespace std;
 
-int n, dist[51][51], num[51];
+int n, num[51];
+bool visited[51];
 vector<int> v[51];
+
+void bfs(int start, int depth)
+{
+    queue<pair<int, int>> q;
+    q.push({ start, depth });
+    visited[start] = 1;
+
+    int maxdepth = 0;
+    while (!q.empty())
+    {
+        int cur = q.front().first;
+        int curdepth = q.front().second;
+        q.pop();
+
+        maxdepth = max(maxdepth, curdepth);
+
+        for (int i = 0; i < v[cur].size(); i++)
+        {
+            int next = v[cur][i];
+            if (!visited[next])
+            {
+                q.push({ next, curdepth + 1 });
+                visited[next] = 1;
+            }
+        }
+    }
+
+    num[start] = maxdepth;
+}
 
 int main()
 {
@@ -24,14 +54,6 @@ int main()
     cin.tie(0), cout.tie(0);
 
     cin >> n;
-    
-    for (int i = 1; i <= n; i++)
-    {
-        for (int j = 1; j <= n; j++)
-        {
-            if (i != j) dist[i][j] = 987654321;
-        }
-    }
 
     while (1)
     {
@@ -40,38 +62,32 @@ int main()
 
         if (n1 == -1 && n2 == -1) break;
         
-        dist[n1][n2] = 1;
-        dist[n2][n1] = 1;
+        v[n1].push_back(n2);
+        v[n2].push_back(n1);
     }
+    
 
-    for (int h = 1; h <= n; h++)
-    {
-        for (int i = 1; i <= n; i++)
-        {
-            for (int j = 1; j <= n; j++)
-            {
-				dist[i][j] = min(dist[i][j], dist[i][h] + dist[h][j]);
-            }
-        }
-    }
-
+    int mn = 987654321, cnt = 0;
     vector<int> res;
-    int mn = 9876543321;
     for (int i = 1; i <= n; i++)
     {
-        int score = 0;
-        for (int j = 1; j <= n; j++)
-        {
-            score = max(dist[i][j], score);
-        }
-
-        if (score < mn)
+        memset(visited, 0, sizeof(visited));
+        
+        bfs(i, 0);
+        
+        if (mn > num[i])
         {
             res.clear();
-            mn = score;
+            mn = num[i];
+            cnt = 1;
             res.push_back(i);
         }
-        else if (score == mn) res.push_back(i);
+        else if (mn == num[i])
+        {
+            res.push_back(i);
+            cnt++;
+        }
+
     }
 
     cout << mn << " " << res.size() << '\n';
