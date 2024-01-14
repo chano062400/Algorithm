@@ -1,23 +1,25 @@
 #include<bits/stdc++.h>
 
 using namespace std;
+int answer = -1; 
+bool visited[8];
 
-int solution(int k, vector<vector<int>> dungeons) {
-    int answer = -1;
-    vector<int> v;
-    for(int i=0; i<dungeons.size(); i++) v.push_back(i);
-    do{
-        int health = k,cnt =0;
-        for(int i=0; i<v.size(); i++)
+void dfs(int cnt, int health, vector<vector<int>> dungeons)
+{
+    answer = max(answer, cnt);
+    
+    for(int i=0; i<dungeons.size(); i++)
+    {
+        if(!visited[i] && health >= dungeons[i][0])
         {
-           int req = dungeons[v[i]][0], use = dungeons[v[i]][1];
-           if(health >= req)
-           {
-               health -= use;
-               cnt++;
-           }
+            visited[i] = 1;
+            dfs(cnt + 1, health - dungeons[i][1], dungeons);
+            visited[i] = 0;
         }
-        answer = max(cnt, answer);
-    }while(next_permutation(v.begin(), v.end()));
+    }
+}
+
+int solution(int k, vector<vector<int>> dungeons) { 
+    dfs(0,k,dungeons);
     return answer;
 }
