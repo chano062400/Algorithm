@@ -17,13 +17,7 @@
 using namespace std;
 
 int n, m, k;
-
-int dfs(int x, int y, int tx, int ty)
-{
-    if (x == tx && y == ty) return 1;
-    if (x > tx || y > ty) return 0;
-    return dfs(x + 1, y, tx, ty) + dfs(x, y + 1, tx, ty);
-}
+int dp[16][16];
 
 int main()
 {
@@ -32,8 +26,56 @@ int main()
 
     cin >> n >> m >> k;
 
-    if (k == 0) dfs(1, 1, n, m);
-    int res = dfs(1, 1, (k - 1) / m + 1, (k - 1) % m + 1) * dfs((k - 1) / m + 1, (k - 1) % m + 1, n, m);
-    cout << res;
+    dp[1][1] = 1;
+    if (k == 0)
+    {
+        for (int i = 1; i <= n; i++)
+        {
+            for (int j = 1; j <= m; j++)
+            {
+                dp[i][j] = dp[i][j] + dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+
+        cout << dp[n][m];
+    }
+    else
+    {
+        int num = 1, kx = 0, ky = 0;
+        for (int i = 1; i <= n; i++)
+        {
+            for (int j = 1; j <= m; j++)
+            {
+                if (num == k)
+                {
+                    kx = i; ky = j;
+                }
+                num++;
+            }
+        }
+
+        for (int i = 1; i <= kx; i++)
+        {
+            for (int j = 1; j <= ky; j++)
+            {
+                dp[i][j] = dp[i][j] + dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+
+        int res = dp[kx][ky];
+        dp[kx][ky] = 1;
+
+        for (int i = kx; i <= n; i++)
+        {
+            for (int j = ky; j <= m; j++)
+            {
+                if (i == kx && j == ky) continue;
+                dp[i][j] = dp[i][j] + dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+
+        cout << res * dp[n][m];
+    }
+
 };
 
