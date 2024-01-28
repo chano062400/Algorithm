@@ -19,34 +19,17 @@ using namespace std;
 int n, cnt=0;
 vector<int> v;
 
-void bt()
+void f(int size, int num)
 {
-    if (v.size() >= n)
+    if (size == n)
     {
-        string str ="";
-        for (auto num : v) str += to_string(num);
-        if (stoi(str) % 3 == 0) cnt++;
+        if (num % 3 == 0) cnt++;
         return;
     }
 
-    if (v.empty())
-    {
-        for (int i = 1; i <= 2; i++)
-        {
-            v.push_back(i);
-            bt();
-            v.pop_back();
-        }
-    }
-    else
-    {
-        for (int i = 0; i <= 2; i++)
-        {
-            v.push_back(i);
-            bt();
-            v.pop_back();
-        }
-    }
+    if(num != 0) f(size + 1, num * 10);
+    f(size + 1, num * 10 + 1);
+    f(size + 1, num * 10 + 2);
 }
 
 int main()
@@ -56,7 +39,7 @@ int main()
 
     cin >> n;
 
-    bt();
+    f(0,0);
 
     cout << cnt;
 
