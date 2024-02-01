@@ -20,7 +20,7 @@ int n, res = -1;
 
 bool cmp(pair<int, int> p1, pair<int, int> p2)
 {
-    return p1.second < p2.second;
+    return p1.second > p2.second;
 }
 
 int main()
@@ -39,25 +39,15 @@ int main()
 
     sort(v.begin(), v.end(), cmp);
 
-    int limit = v.front().second - v.front().first;
-    bool can = true;
-    for (int i = 0; i <= limit; i++)
+    int tmp = 1000000;
+    for (int i = 0; i < v.size(); i++)
     {
-        int tmp = i;
-        for (int j = 0; j < v.size(); j++)
-        {
-            tmp += v[j].first;
-            if (tmp > v[j].second)
-            {
-                can = false;
-                break;
-            }
-        }
-        if(can) res = max(res, i);
+        tmp = min(tmp, v[i].second) - v[i].first;
     }
-
-    cout << res;
     
+    if (tmp < 0) cout << -1;
+    else cout << tmp;
+
 
 };
 
