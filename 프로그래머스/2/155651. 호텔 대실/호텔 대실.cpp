@@ -12,32 +12,23 @@ bool cmp(pair<int,int> v1, pair<int,int> v2)
 int solution(vector<vector<string>> book_time) {
     int answer = 0;
     vector<pair<int,int>> v;
+    int time[2410] = {0,};
     for(int i=0; i<book_time.size(); i++)
     {
         int start = stoi(book_time[i][0].substr(0,2)) * 100 + stoi(book_time[i][0].substr(3,2));
         int end = stoi(book_time[i][1].substr(0,2)) * 100 + stoi(book_time[i][1].substr(3,2)) + 10;
         if (end % 100 >= 60) end += 40; // 1560 = 16:00 이므로 +40 해줘서 -> 1600
 
-        v.push_back({start, end});
-    }
-    
-    sort(v.begin(), v.end(), cmp);
-    
-    priority_queue<int, vector<int> ,greater<>> pq;
-    pq.push(v[0].second);
-    
-    for(int i=1; i<v.size(); i++)
-    {
-        // 진행 중인 강의 중 가장 빨리 끝나는 강의가 다음 강의 시작시간보다 일찍 끝난다면
-        if(pq.top() <= v[i].first)
+        for(int j=start; j<end; j++)
         {
-            //진행 중인 강의를 끝내고 현 강의실에서 강의 진행.
-            pq.pop();
-            pq.push(v[i].second);
+            time[j]++;
         }
-        // 다른 강의실에서 강의 진행
-        else pq.push(v[i].second);
     }
     
-    return pq.size();
+    for(int i=0; i<=2409; i++)
+    {
+        answer = max(answer, time[i]);
+    }
+    
+    return answer;
 }
