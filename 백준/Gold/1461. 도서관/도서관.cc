@@ -22,94 +22,33 @@ int main()
     cin.tie(nullptr);
     cout.tie(nullptr);
     
-    int n, m, res =0;
+    int n, m, idx = 0, res =0;
     
     cin >> n >> m;
     
-    vector<int> plus,minus;
+    vector<int> v(n);
 
     for (int i = 0; i < n; i++)
-    {
-        int num;
-        cin >> num;
-        if (num > 0) plus.push_back(num);
-        else minus.push_back(num);
+    {   
+        cin >> v[i];
+        if (v[i] < 0) idx++;
     }
 
-    if(!plus.empty()) sort(plus.begin(), plus.end(), greater<int>());
-    if(!minus.empty()) sort(minus.begin(), minus.end());
+    sort(v.begin(), v.end());
 
-    int mn = !minus.empty() ? abs(minus[0]) : 0, mx = !plus.empty() ? plus[0] : 0;
-    
-    if (mn > mx)
+    // 양수
+    for (int i = n - 1; i >= idx; i -= m)
     {
-        while (!plus.empty())
-        {
-            if (plus.size() >= m)
-            {
-                res += plus[0] * 2;
-                for (int i = 0; i < m; i++) plus.erase(plus.begin());
-            }
-            else
-            {
-                res += plus[0] * 2;
-                plus.clear();
-            }
-        }
-
-        res += abs(minus[0]);
-        if (minus.size() >= m) for (int i = 0; i < m; i++) minus.erase(minus.begin());
-        else minus.clear();
-
-        while (!minus.empty())
-        {
-            if (minus.size() >= m)
-            {
-                res += abs(minus[0] * 2);
-                for (int i = 0; i < m; i++) minus.erase(minus.begin());
-            }
-            else
-            {
-                res += abs(minus[0] * 2);
-                minus.clear();
-            }
-        }
+        res += v[i] * 2;
     }
-    else
+
+    // 음수
+    for (int i = 0; i < idx; i += m)
     {
-        while (!minus.empty())
-        {
-            if (minus.size() >= m)
-            {
-                res += abs(minus[0] * 2);
-                for (int i = 0; i < m; i++) minus.erase(minus.begin());
-            }
-            else
-            {
-                res += abs(minus[0] * 2);
-                minus.clear();
-            }
-        }
-
-        res += plus[0];
-        if (plus.size() >= m) for (int i = 0; i < m; i++) plus.erase(plus.begin());
-        else plus.clear();
-
-        while (!plus.empty())
-        {
-            if (plus.size() >= m)
-            {
-                res += plus[0] * 2;
-                for (int i = 0; i < m; i++) plus.erase(plus.begin());
-            }
-            else
-            {
-                res += plus[0] * 2;
-                plus.clear();
-            }
-        }
+        res += abs(v[i] * 2);
     }
-    
+
+    res -= max(abs(v[0]), v[n - 1]);
+
     cout << res;
-
 }
