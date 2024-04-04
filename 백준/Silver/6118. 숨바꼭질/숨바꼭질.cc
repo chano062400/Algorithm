@@ -67,7 +67,7 @@ int main()
         v[end].push_back(start);
     }
 
-    fill(dist, dist + 20001, 987654321);
+    fill(dist, dist + n + 1, 987654321);
 
     dijkstra();
 
