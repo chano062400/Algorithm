@@ -20,7 +20,6 @@
 using namespace std;
 
 int n;
-int idx[1000001] = {};
 
 int main()
 {
@@ -30,7 +29,7 @@ int main()
 
     cin >> n;
 
-    vector<int> v, lis;
+    vector<int> v, lis,idx(n);
     
     for (int i = 0; i < n; i++)
     {
