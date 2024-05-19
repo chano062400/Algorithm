@@ -19,37 +19,48 @@
 #include <memory>
 using namespace std;
 
-int parent[1001];
 char mw[1001];
+bool visited[1001];
 int n, m, res = 0, cnt = 0;
+vector<pair<int, int>> v[1001];
 
-int Find(int x)
+bool prim(int start)
 {
-    if (parent[x] == x) return x;
-    return parent[x] = Find(parent[x]);
-}
+    priority_queue<pair<int, int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+    visited[start] = 1;
 
-bool IsSameParent(int x, int y)
-{
-    x = Find(x);
-    y = Find(y);
-
-    return x == y;
-}
-
-void Union(int x, int y)
-{
-    x = Find(x);
-    y = Find(y);
-
-    if (x >= y)
+    for (int i = 0; i < v[start].size(); i++)
     {
-        parent[x] = y;
+        int dist = v[start][i].first;
+        int next = v[start][i].second;
+        pq.push({ dist,next });
     }
-    else
+
+    while (!pq.empty())
     {
-        parent[y] = x;
+        int dist = pq.top().first;
+        int cur = pq.top().second;
+        pq.pop();
+
+        if (visited[cur]) continue;
+
+        visited[cur] = 1;
+        
+        res += dist;
+
+        if (++cnt == n - 1)
+        {
+            return true;
+        }
+
+        for (int i = 0; i < v[cur].size(); i++)
+        {
+            int nextdist = v[cur][i].first;
+            int next = v[cur][i].second;
+            pq.push({ nextdist, next });
+        }
     }
+    return false;
 }
 
 int main()
@@ -60,40 +71,23 @@ int main()
  
     cin >> n >> m;
 
-    for (int i = 1; i <= n; i++) parent[i] = i;
-
     for (int i = 1; i <= n; i++)
     {
         cin >> mw[i];
     }
 
-    vector < pair<int, pair<int, int>>> v;
     for (int i = 0; i < m; i++)
     {
         int s, e, d;
         cin >> s >> e >> d;
-        v.push_back({d, { s, e} });
-    }
-
-    sort(v.begin(), v.end());
-
-    for (int i = 0; i < v.size(); i++)
-    {
-        int start = v[i].second.first;
-        int end = v[i].second.second;
-        int dist = v[i].first;
-        if (!IsSameParent(start, end) && mw[start] != mw[end])
+        if (mw[s] != mw[e])
         {
-            Union(start, end);
-            res += dist;
-            if (++cnt == n - 1)
-            {
-                cout << res;
-                return 0;
-            }
+            v[s].push_back({ d,e });
+            v[e].push_back({ d,s });
         }
     }
-     
-    cout << -1;
+
+    if (prim(1)) cout << res;
+    else cout << -1;
 }
   
