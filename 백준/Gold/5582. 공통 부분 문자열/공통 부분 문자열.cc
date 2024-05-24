@@ -19,7 +19,7 @@
 #include <memory>
 using namespace std;
 
-int arr[4001][4001], dp[4001][4001];
+int dp[4001][4001];
 
 int main()
 {
