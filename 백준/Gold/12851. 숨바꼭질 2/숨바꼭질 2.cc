@@ -20,7 +20,6 @@
 using namespace std;
 
 int n, k, cnt = 0;
-int arr[100001];
 bool visited[100001];
 vector<int> v;
 
