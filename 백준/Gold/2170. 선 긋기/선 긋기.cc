@@ -4,62 +4,58 @@
 #include <memory.h>
 #include <string>
 #include <iomanip>
-#include "algorithm"
+#include <algorithm>
 #include <cmath>
 #include <stack>
 #include <regex>
 #include <map>
+#include <cstdlib>
+#include <list>
+#include <sstream>
+#include <bitset>
+#include <set>
+#include <unordered_map>
+#include <numeric>
+#include <memory>
 using namespace std;
 
-int n;
 
-bool cmp(pair<int, int> v1, pair<int, int> v2)
+int main()
 {
-	if (v1.first == v2.first) return v1.second < v2.second;
-	return v1.first < v2.first;
-}
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+     
+    int n;
+    cin >> n;
 
-int main() {
-	ios_base::sync_with_stdio(0);
-	cin.tie(0), cout.tie(0);
-	
-	cin >> n;
-	vector<pair<int, int>> v,lines;
+    vector<pair<int, int>> v;
 
-	for (int i = 0; i < n; i++)
-	{
-		int start, end;
-		cin >> start >> end;
-		v.push_back({ start,end });
-	}
+    for (int i = 0; i < n; i++)
+    {
+        int s, e;
+        cin >> s >> e;
+        v.push_back({ s, e });
+    }
 
-	sort(v.begin(), v.end(),cmp);
+    sort(v.begin(), v.end());
 
-	int start = v[0].first, end = v[0].second, sum = end -start;
-	for (int i = 1; i < v.size(); i++)
-	{
-		if (v[i].first > end)
-		{
-			start = v[i].first;
-			end = v[i].second;
-			sum += end - start;
-		}
-		else if (v[i].first <= end)
-		{
-			if (v[i].first < start)
-			{
-				sum += start - v[i].first;
-				start = v[i].first;
-			}
-			if (v[i].second > end)
-			{
-				sum += v[i].second - end;
-				end = v[i].second;
-			}
-		}
-		
-	}
+    int start = -1e9, end = -1e9, sum = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (end < v[i].first)
+        {
+            sum += end - start;
+            start = v[i].first;
+        }
+            
+        if (end < v[i].second)
+        {
+            end = v[i].second;
+        }
+    }
 
+    sum += end - start;
 
-	cout << sum;
+    cout << sum;
 }
