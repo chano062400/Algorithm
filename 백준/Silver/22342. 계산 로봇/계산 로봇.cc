@@ -55,7 +55,7 @@ int main()
         }
     }
 
-    for (int i = 1; i <= n; i++)
+    for (int i = 1; i <= m; i++)
     {
         res = max(res, output[i][n - 1]);
     }
