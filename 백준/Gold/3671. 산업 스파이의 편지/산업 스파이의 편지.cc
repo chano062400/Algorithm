@@ -20,34 +20,35 @@
 using namespace std;
 
 #define MAX 9999999
-int n, prime = 0;
+int n;
 bool IsPrime[10000000], check[8];
-vector<char> v;
+string num;
 set<int> Set;
 
-void back(int len, string str)
+void back(int idx, string str)
 {
-    if (str.length() == len)
+    if (idx > num.length()) return;
+
+    if (idx > 0)
     {
         while (str[0] == '0')
         {
             str.erase(str.begin());
         }
+
         if (!str.empty() && IsPrime[stoi(str)] && Set.find(stoi(str)) == Set.end())
         {
-            prime++;
             Set.insert(stoi(str));
         }
-        return;
     }
 
-    for (int i = 0; i < v.size(); i++)
+    for (int i = 0; i < num.length(); i++)
     {
         if (!check[i])
         {
             check[i] = true;
-            str += v[i];
-            back(len, str);
+            str += num[i];
+            back(idx + 1, str);
             str.pop_back();
             check[i] = false;
         }
@@ -76,25 +77,14 @@ int main()
 
     for (int i = 0; i < n; i++)
     {
-        string num;
         cin >> num;
 
-        prime = 0;
-        for (int idx = 0; idx < num.length(); idx++)
-        {
-            v.push_back(num[idx]);
-        }
-
-        sort(v.begin(), v.end());
         memset(check, 0, sizeof(check));
-
-        for (int j = 1; j <= num.length(); j++)
-        {
-            back(j, "");
-        }
-        v.clear();
+   
+        back(0, "");
+        
+        cout << Set.size() << '\n';
         Set.clear();
-        cout << prime << '\n';
     }
 
 }
