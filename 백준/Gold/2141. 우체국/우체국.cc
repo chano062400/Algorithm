@@ -29,38 +29,26 @@ int main()
     
     cin >> n;
     vector<pair<int,int>> v(n + 1);
-    vector<long long> sum(n+1,0);
+    long long sum = 0;
 
     for (int i = 1; i <= n; i++)
     {
         cin >> v[i].first >> v[i].second;
+        sum += v[i].second;
     }
     
     sort(v.begin() + 1, v.end());
 
+    long long cursum = 0;
     for (int i = 1; i <= n; i++)
     {
-        sum[i] = sum[i - 1] + v[i].second;
-    }
-
-    int start = 1, end = n, res = 1e9;
-    while (start <= end)
-    {
-        int mid = (start + end) / 2;
-
-        if (sum[mid] >= sum[n] - sum[mid])
+        cursum += v[i].second;
+        if (cursum >= (sum + 1) / 2)
         {
-            res = min(res, v[mid].first);
-            end = mid - 1;
-        }
-        else
-        {
-            start = mid + 1;
+            cout << v[i].first;
+            return 0;
         }
     }
-
-    cout << res;
-
 
 }
 
