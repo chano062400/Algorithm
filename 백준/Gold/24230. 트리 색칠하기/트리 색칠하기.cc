@@ -19,37 +19,22 @@
 #include <memory>
 using namespace std;
 
-int n, depth[200001], res;
-bool visited[200001];
+int n, res;
 vector<int> color(200001), v[200001];
+bool visited[200001];
 
-void finddepth(int index, int dep)
+void paint(int cur, int prevcolor)
 {
-    for (int i = 0; i < v[index].size(); i++)
+    if (color[cur] != prevcolor) res++;
+    visited[cur] = true;
+ 
+    for (int i = 0; i < v[cur].size(); i++)
     {
-        int next = v[index][i];
-        if (depth[next] == 0)
+        int next = v[cur][i];
+        if (!visited[next])
         {
-            depth[next] = dep;
-            finddepth(next, dep + 1);
+            paint(next, color[cur]);
         }
-    }
-}
-
-void paint(int index, int previndex)
-{
-    if (depth[previndex] > depth[index] || visited[index]) return;
-    visited[index] = true;
-
-    for (int i = 0; i < v[index].size(); i++)
-    {
-        int next = v[index][i];
-        if (color[next] != 0 && !visited[next])
-        {
-            if (color[index] != color[next]) res++;
-        }
-        
-        paint(next, index);
     }
 }
 
@@ -60,8 +45,6 @@ int main()
     cout.tie(nullptr);
 
     cin >> n;
-
-    depth[1] = 1;
 
     for (int i = 1; i <= n; i++)
     {
@@ -76,14 +59,6 @@ int main()
         v[b].push_back(a);
     }
 
-    for (int i = 1; i <= n; i++)
-    {
-        sort(v[i].begin(), v[i].end());
-    }
-
-    finddepth(1, 2);
-
-    if (color[1] != 0) res++;
     paint(1, 0);
 
     cout << res;
