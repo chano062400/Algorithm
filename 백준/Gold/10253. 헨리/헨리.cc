@@ -19,7 +19,7 @@
 #include <memory>
 using namespace std;
 
-int gcd(int a, int b)
+long long gcd(long long a, long long b)
 {
 	if (b == 0) return a;
 	return gcd(b, a % b);
@@ -39,41 +39,19 @@ int main()
 		long long a, b;
 		cin >> a >> b;
 
-		long long x, y, i = 2;
-
-		while (1)
+		long long i;
+		while (a != 1)
 		{
-			long long gcdab = gcd(a, b);
-			if (gcdab != 1)
-			{
-				a /= gcdab;
-				b /= gcdab;
-			}
+			i = b % a == 0 ? b / a : b / a + 1;
+			a = a * i - b;
+			b = b * i;
 
-			if (a == 1)
-			{
-				cout << b << '\n';
-				break;
-			}
-
-			long long GCD = gcd(b, i);
-			long long LCM = i * b / GCD;
-
-			long long tempa = a * (LCM / b), tempb = LCM;
-			y = LCM;
-			x = (LCM / i);
-			if (tempa >= x)
-			{
-				b = tempb;
-				a = tempa;
-				a -= x;
-				if (a) i = b / a;
-				else i++;
-			}
-			else i++;
-			
+			long long GCD = gcd(a, b);
+			a /= GCD;
+			b /= GCD;
 		}
 
+		cout << b << '\n';
 	}
 }
 
