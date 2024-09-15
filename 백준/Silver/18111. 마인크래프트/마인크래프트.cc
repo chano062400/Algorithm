@@ -19,16 +19,7 @@
 #include <memory>
 using namespace std;
 
-int arr[501][501], n, m ,b;
-int dx[] = { 1,-1,0,0 };
-int dy[] = { 0,0,1,-1 };
-vector<pair<int, int>> sum;
-
-bool cmp(pair<int, int> p1, pair<int, int> p2)
-{
-	if (p1.first == p2.first) return p1.second > p2.second;
-	return p1.first < p2.first;
-}
+int height[257], n, m, b;
 
 int main()
 {
@@ -38,41 +29,39 @@ int main()
 
 	cin >> n >> m >> b;
 
+	int minheight = 256, maxheight = 0;
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < m; j++)
 		{
-			cin >> arr[i][j];
+			int a;
+			cin >> a;
+
+			minheight = min(minheight, a);
+			maxheight = max(maxheight, a);
+			height[a]++;
 		}
 	}
 
-	int res = 0;
-	for (int targetheight = 0; targetheight <= 256; targetheight++)
+	// 최소 시간이 될 높이는 최고, 최저 높이의 중간 지점이 된다.
+	int i = minheight, j = maxheight, mincnt = height[i], maxcnt = height[j], time = 0;
+	while (i < j)
 	{
-		int removeblock = 0, putblock = 0;
-		for (int x = 0; x < n; x++)
+		// 쌓기
+		if (mincnt <= b && mincnt <= maxcnt * 2)
 		{
-			for (int y = 0; y < m; y++)
-			{
-				int curheight = arr[x][y], heightdif = abs(targetheight - curheight);
-
-				if (targetheight > curheight) putblock += heightdif;
-				else if (targetheight < curheight) removeblock += heightdif;
-			}
+			b -= mincnt;
+			time += mincnt;
+			mincnt += height[++i];
 		}
-
-		int timesum;
-		if (b + removeblock >= putblock)
+		// 제거
+		else
 		{
-			timesum = removeblock * 2 + putblock;
+			b += maxcnt;
+			time += maxcnt * 2;
+			maxcnt += height[--j];
 		}
-		else continue;
-
-		sum.push_back({ timesum, targetheight });
 	}
-
-	sort(sum.begin(), sum.end(), cmp);
-
-	cout << sum[0].first << " " << sum[0].second;
+    cout << time << " " << i << '\n';
 }
 
