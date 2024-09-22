@@ -34,8 +34,8 @@ void cloudmove(int d, int s)
 
 		while (nx < 0) nx = n + nx;
 		while (ny < 0) ny = n + ny;
-		while (nx > n) nx %= n;
-		while (ny > n) ny %= n;
+		if (nx > n) nx %= n;
+		if (ny > n) ny %= n;
 		
 		if (nx == 0) nx = n;
 		if (ny == 0) ny = n;
