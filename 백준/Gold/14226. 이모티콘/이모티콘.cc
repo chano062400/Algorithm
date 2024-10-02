@@ -19,7 +19,7 @@
 #include <memory>
 using namespace std;
 
-bool check[10001][10001];
+bool check[1001][1001];
 
 int main()
 {
@@ -46,22 +46,27 @@ int main()
 			break;
 		}
 
-		if (cs > 0 && !check[cs][cs])
+		if (cs > 0 && cs <= 1000)
 		{
-			q.push({ { cs,cs }, ct + 1 });
-			check[cs][cs] = true;
+			if (cs > 0 && !check[cs][cs])
+			{
+				q.push({ { cs,cs }, ct + 1 });
+				check[cs][cs] = true;
+			}
+			if (cs - 1 >= 0 && !check[cs - 1][cc])
+			{
+				q.push({ { cs - 1,cc }, ct + 1 });
+				check[cs - 1][cc] = true;
+			}
 		}
-		if (cc > 0 && !check[cs + cc][cc])
+		if (cs + cc > 0 && cs + cc <= 1000 && cc > 0)
 		{
-			q.push({ { cs + cc, cc }, ct + 1 });
-			check[cs + cc][cc] = true;
+			if (!check[cs + cc][cc])
+			{
+				q.push({ { cs + cc, cc }, ct + 1 });
+				check[cs + cc][cc] = true;
+			}
 		}
-		if (cs - 1 >= 0 && !check[cs - 1][cc])
-		{
-			q.push({ { cs - 1,cc }, ct + 1 });
-			check[cs - 1][cc] = true;
-		}
-
 	}
 
 	cout << time;
