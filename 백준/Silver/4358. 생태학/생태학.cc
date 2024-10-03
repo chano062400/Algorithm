@@ -43,12 +43,13 @@ int main()
 		sum += 1.f;
 	}
 
+	cout << fixed;
+	cout.precision(4);
 
 	for (const auto& tree : trees)
 	{
 		float divide = (tree.second / sum) * 100.f;
-		cout << fixed;
-		cout.precision(4);
+
 	
 		cout << tree.first << " " << divide << '\n';
 	}
