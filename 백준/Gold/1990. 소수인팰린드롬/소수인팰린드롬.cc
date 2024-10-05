@@ -19,6 +19,8 @@
 #include <memory>
 using namespace std;
 
+bool isprime[10000001];
+
 int main()
 {
 	ios::sync_with_stdio(false);
@@ -28,12 +30,11 @@ int main()
 	int a, b;
 	cin >> a >> b;
 
-	vector<bool> isprime(b + 1, 1);
-
+    memset(isprime,1,sizeof(isprime));
 	for (int i = 2; i <= sqrt(10000000); i++)
 	{
 		if (!isprime[i]) continue;
-		for (int j = i * i; j <= b; j += i)
+		for (int j = i * i; j <= 10000000; j += i)
 		{
 			isprime[j] = false;
 		}
