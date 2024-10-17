@@ -33,7 +33,7 @@ void explosion(int cursecond)
 	{
 		for (int j = 1; j <= c; j++)
 		{
-			if (arr[i][j] == 'O' && cursecond - install[i][j] == 3)
+			if (cursecond - install[i][j] == 3)
 			{
 				arr[i][j] = '.';
 
@@ -42,7 +42,7 @@ void explosion(int cursecond)
 					int nx = i + dx[k];
 					int ny = j + dy[k];
 					if (nx < 1 || nx > r || ny < 1 || ny > c) continue;
-					if (install[nx][ny] == install[i][j]) continue;
+					
 					arr[nx][ny] = '.';
 				}
 			}
