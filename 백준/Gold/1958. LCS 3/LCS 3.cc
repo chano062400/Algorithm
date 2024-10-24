@@ -1,25 +1,13 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <memory.h>
-#include <string>
-#include <iomanip>
 #include <algorithm>
-#include <cmath>
-#include <stack>
-#include <regex>
-#include <map>
-#include <cstdlib>
-#include <list>
-#include <sstream>
-#include <bitset>
-#include <set>
-#include <unordered_map>
-#include <numeric>
 #include <memory>
+#include <cmath>
+
 using namespace std;
 
-int dp[101][101][101];
+int lcs[101][101][101];
 
 int main()
 {
@@ -27,29 +15,25 @@ int main()
     cin.tie(nullptr);
     cout.tie(nullptr);
 
-    string a, b, c;
-    cin >> a >> b >> c;
+    string s1, s2, s3;
+    cin >> s1 >> s2 >> s3;
 
-    memset(dp, 0, sizeof(dp));
-
-    for (int i = 1; i <= a.length(); i++)
+    for (int i = 1; i <= s1.length(); i++)
     {
-        for (int j = 1; j <= b.length(); j++)
+        for (int j = 1; j <= s2.length(); j++)
         {
-            for (int h = 1; h <= c.length(); h++)
+            for (int k = 1; k <= s3.length(); k++)
             {
-                if (a[i - 1] == b[j - 1] && b[j - 1] == c[h - 1])
+                if (s1[i - 1] == s2[j - 1] && s2[j - 1] == s3[k - 1])
                 {
-                    dp[i][j][h] = dp[i - 1][j - 1][h - 1] + 1;
+                    lcs[i][j][k] = lcs[i - 1][j - 1][k - 1] + 1;
                 }
                 else
                 {
-                    dp[i][j][h] = max(max(dp[i - 1][j][h], dp[i][j - 1][h]), dp[i][j][h - 1]);
+                    lcs[i][j][k] = max(max(lcs[i - 1][j][k], lcs[i][j - 1][k]), lcs[i][j][k - 1]);
                 }
             }
         }
     }
-
-    cout << dp[a.length()][b.length()][c.length()];
+    cout << lcs[s1.length()][s2.length()][s3.length()];
 }
-   
