@@ -1,22 +1,10 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <memory.h>
-#include <string>
-#include <iomanip>
 #include <algorithm>
-#include <cmath>
-#include <stack>
-#include <regex>
-#include <map>
-#include <cstdlib>
-#include <list>
-#include <sstream>
-#include <bitset>
-#include <set>
-#include <unordered_map>
-#include <numeric>
 #include <memory>
+#include <cmath>
+
 using namespace std;
 
 int main()
@@ -27,8 +15,7 @@ int main()
 
     int n;
     cin >> n;
-    vector<int> v(n),lis;
-
+    vector<int>v(n), lis;
     for (int i = 0; i < n; i++)
     {
         cin >> v[i];
@@ -36,19 +23,18 @@ int main()
 
     lis.push_back(v[0]);
 
-    for (int i = 1; i < n; i++)
+    for (int i = 1; i < v.size(); i++)
     {
         if (v[i] > lis.back())
         {
             lis.push_back(v[i]);
-            continue;
         }
-
-        auto it = lower_bound(lis.begin(), lis.end(), v[i]);
-        *it = v[i];
+        else
+        {
+            int idx = lower_bound(lis.begin(), lis.end(), v[i]) - lis.begin();
+            lis[idx] = v[i];
+        }
     }
 
     cout << n - lis.size();
 }
-
-    
