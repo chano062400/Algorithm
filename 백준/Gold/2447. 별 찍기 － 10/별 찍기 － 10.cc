@@ -10,9 +10,7 @@
 #include <queue>
 using namespace std;
 
-char arr[7000][7000];
-
-void star(int x, int y, int len, bool empty)
+void star(int x, int y, int len, bool empty, vector<vector<char>>& arr)
 {
 	if (len == 0)
 	{
@@ -20,15 +18,15 @@ void star(int x, int y, int len, bool empty)
 		else arr[x][y] = '*';
 		return;
 	}
-	star(x, y, len / 3, empty);
-	star(x, y + len, len / 3, empty);
-	star(x, y + len * 2, len / 3, empty);
-	star(x + len, y, len / 3, empty);
-	star(x + len, y + len, len / 3, true);
-	star(x + len, y + len * 2, len / 3, empty);
-	star(x + len * 2, y, len / 3, empty);
-	star(x + len * 2, y + len, len / 3, empty);
-	star(x + len * 2, y + len * 2, len / 3, empty);
+	star(x, y, len / 3, empty, arr);
+	star(x, y + len, len / 3, empty, arr);
+	star(x, y + len * 2, len / 3, empty, arr);
+	star(x + len, y, len / 3, empty, arr);
+	star(x + len, y + len, len / 3, true, arr);
+	star(x + len, y + len * 2, len / 3, empty, arr);
+	star(x + len * 2, y, len / 3, empty, arr);
+	star(x + len * 2, y + len, len / 3, empty, arr);
+	star(x + len * 2, y + len * 2, len / 3, empty, arr);
 }
 
 int main()
@@ -39,7 +37,8 @@ int main()
 	
 	int n;
 	cin >> n;
-	star(0, 0, n / 3, false);
+	vector<vector<char>> arr(n, vector<char>(n));
+	star(0, 0, n / 3, false, arr);
 
 	for (int i = 0; i < n; i++)
 	{
