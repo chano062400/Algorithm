@@ -9,7 +9,6 @@ bool cmp(vector<int> v1, vector<int> v2, int col)
 
 int solution(vector<vector<int>> data, int col, int row_begin, int row_end) {
     int answer = 0;
-    bitset<23> ans(answer);
     sort(data.begin(), data.end(),
          [col] (vector<int> v1, vector<int> v2) 
          {
@@ -24,9 +23,8 @@ int solution(vector<vector<int>> data, int col, int row_begin, int row_end) {
         {
             sum += data[i][j] % (i + 1);
         }
-        bitset<23> bs(sum);
-        ans ^= bs;
+        answer ^= sum;
     }
 
-    return ans.to_ulong();
+    return answer;
 }
