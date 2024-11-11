@@ -5,7 +5,7 @@ using namespace std;
 int dx[] = {1, -1 ,0 ,0};
 int dy[] = {0, 0, 1, -1};
 
-int bfs(int x, int y, vector<vector<int>>& v, const vector<vector<int>>& land, vector<vector<bool>>& visited)
+int bfs(int x, int y, vector<int>& v, const vector<vector<int>>& land, vector<vector<bool>>& visited)
 {
     vector<pair<int,int>> pos;
     vector<bool> check(land[0].size(), 0);
@@ -39,7 +39,7 @@ int bfs(int x, int y, vector<vector<int>>& v, const vector<vector<int>>& land, v
         if(!check[xy.second]) 
         {
             check[xy.second] = true;
-            v[xy.second].push_back(sum);
+            v[xy.second] += sum;
         }
     }
     
@@ -48,7 +48,7 @@ int bfs(int x, int y, vector<vector<int>>& v, const vector<vector<int>>& land, v
 
 int solution(vector<vector<int>> land) {
     int answer = 0, r = land.size(), c = land[0].size();
-    vector<vector<int>> v(c);
+    vector<int> v(c);
     vector<vector<bool>> visited(r, vector<bool>(c,0));
     for(int i = 0; i < c; i++)
     {
@@ -63,9 +63,7 @@ int solution(vector<vector<int>> land) {
 
     for(auto col : v)
     {
-        int sum = 0;
-        for(auto n : col) sum += n;
-        answer = max(answer, sum);
+        answer = max(answer, col);
     }
     return answer;
 }
