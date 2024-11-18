@@ -4,21 +4,21 @@ using namespace std;
 
 int dx[] = {1,-1,0,0};
 int dy[] = {0,0,1,-1};
-int depth = 0;
 
-void dfs(int x, int y, int prevcolor, const vector<vector<int>>& picture, vector<vector<bool>>& visited)
+int dfs(int x, int y, int prevcolor, const vector<vector<int>>& picture, vector<vector<bool>>& visited)
 {
-    depth++;
+    int cnt = 1;
+    visited[x][y] = true;
     for(int i = 0; i < 4; i++)
     {
         int nx = x + dx[i];
         int ny = y + dy[i];
         if(nx < 0 || nx >= picture.size() || ny < 0 || ny >= picture[0].size()) continue;
         if(visited[nx][ny] || picture[nx][ny] != prevcolor) continue;
-        visited[nx][ny] = true;
-        dfs(nx, ny, picture[x][y], picture, visited);
+        
+        cnt += dfs(nx, ny, picture[x][y], picture, visited);
     }
-    return;
+    return cnt;
 }
 
 vector<int> solution(int m, int n, vector<vector<int>> picture) {
@@ -34,11 +34,8 @@ vector<int> solution(int m, int n, vector<vector<int>> picture) {
         {
             if(!visited[i][j] && picture[i][j] != 0)
             {
-                depth = 0;
                 num_area++;
-                visited[i][j] = true;
-                dfs(i, j, picture[i][j], picture, visited);
-                max_area = max(max_area, depth);
+                max_area = max(max_area, dfs(i, j, picture[i][j], picture, visited));
             }
         }
     }
