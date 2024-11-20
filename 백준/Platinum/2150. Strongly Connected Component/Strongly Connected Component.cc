@@ -15,31 +15,45 @@
 
 using namespace std;
 
-int v, e;
-vector<int> adj[10001], radj[10001];
+int v, e, order, scc_count;
+vector<int> adj[10001], discover(10001, -1), scc(10001, -1);
+vector<vector<int>> sccs;
 stack<int> st;
 bool visited[10001];
 
-void dfs(int cur)
+int dfs(int cur)
 {
-    if (visited[cur]) return;
-    visited[cur] = true;
+    int min_order = discover[cur] = order++;
+    st.push(cur);
+
     for (auto next : adj[cur])
     {
-        dfs(next);
+        if (discover[next] == -1)
+        {
+            min_order = min(min_order, dfs(next));
+        }
+        else if (scc[next] == -1)
+        {
+            min_order = min(min_order, discover[next]);
+        }
     }
-    st.push(cur);
-}
 
-void dfs(int cur, vector<int>& scc)
-{
-    if (visited[cur]) return;
-    visited[cur] = true;
-    for (auto next : radj[cur])
+    if (min_order == discover[cur])
     {
-        dfs(next, scc);
+        vector<int> temp;
+        while (1)
+        {
+            int num = st.top();
+            st.pop();
+            scc[num] = scc_count;
+            temp.push_back(num);
+            if (num == cur) break;
+        }
+        sort(temp.begin(), temp.end());
+        sccs.push_back(temp);
+        scc_count++;
     }
-    scc.push_back(cur);
+    return min_order;
 }
 
 int main() {
@@ -52,36 +66,18 @@ int main() {
         int a, b;
         cin >> a >> b;
         adj[a].push_back(b);
-        radj[b].push_back(a);
     }
 
     for (int i = 1; i <= v; i++)
     {
-        if (!visited[i])
+        if (discover[i] == -1)
         {
             dfs(i);
         }
     }
 
-    memset(visited, 0, sizeof(visited));
-    vector<vector<int>> sccs;
-    while (!st.empty())
-    {
-        vector<int> scc;
-        int cur = st.top();
-        st.pop();
-        if (!visited[cur])
-        {
-            dfs(cur, scc);
-
-            sort(scc.begin(), scc.end());
-
-            sccs.push_back(scc);
-        }
-    }
-
-    sort(sccs.begin(), sccs.end());
     cout << sccs.size() << '\n';
+    sort(sccs.begin(), sccs.end());
     for (auto scc : sccs)
     {
         for (auto num : scc)
