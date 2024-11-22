@@ -14,20 +14,6 @@
 #include <numeric>
 using namespace std;
 
-bool isprime(int num)
-{
-    if (num < 10)
-    {
-        if (num == 2 || num == 3 || num == 5 || num == 7) return true;
-        else return false;
-    }
-
-    for (int i = 2; i <= sqrt(num); i++)
-    {
-        if (num % i == 0) return false;
-    }
-    return true;
-}
 
 int main() {
     ios::sync_with_stdio(false);
@@ -35,20 +21,33 @@ int main() {
     
     int n;
     cin >> n;
+    vector<bool> isprime(n + 1, 1);
     vector<int> primes;
-    for (int i = 2; i <= n; i++)
-    {
-        if (isprime(i)) primes.push_back(i);
-    }
 
-    if (primes.empty())
+    if (n < 2)
     {
         cout << 0;
         return 0;
     }
 
+    for (int i = 2; i <= sqrt(n); i++)
+    {
+        for (int j = i * 2; j <= n; j += i)
+        {
+            isprime[j] = false;
+        }
+    }
+
+    for (int i = 2; i <= n; i++)
+    {
+        if (isprime[i])
+        {
+            primes.push_back(i);
+        }
+    }
+
     int start = 0, end = 0, sum = primes[0], res = 0;
-    while (start <= end && end < primes.size())
+    while(start <= end && end < primes.size())
     {
         if (sum == n) res++;
         if (sum <= n)
@@ -61,5 +60,6 @@ int main() {
             sum -= primes[start++];
         }
     }
+    
     cout << res;
 }
