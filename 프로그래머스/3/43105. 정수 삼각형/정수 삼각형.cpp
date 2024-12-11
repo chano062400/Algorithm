@@ -5,7 +5,7 @@ using namespace std;
 
 int solution(vector<vector<int>> triangle) {
     int answer = 0, size = triangle.size();
-    vector<vector<int>> dp(500, vector<int>(500,0));
+    vector<vector<int>> dp(size, vector<int>(size,0));
     dp[0][0] = triangle[0][0];
     
     for(int i = 1; i < triangle.size(); i++)
