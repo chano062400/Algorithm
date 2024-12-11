@@ -1,36 +1,17 @@
-#include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
 int solution(vector<vector<int>> triangle) {
-    int answer = 0, size = triangle.size();
-    vector<vector<int>> dp(size, vector<int>(size,0));
-    dp[0][0] = triangle[0][0];
-    
-    for(int i = 1; i < triangle.size(); i++)
-    {
-        for(int j = 0; j < triangle[i].size(); j++)
-        {
-            if(j == 0)
-            {
-                dp[i][j] = max(dp[i][j], dp[i-1][j] + triangle[i][j]);
-            }
-            else if(j == triangle[i].size() - 1)
-            {
-                dp[i][j] = max(dp[i][j], dp[i-1][j-1] + triangle[i][j]);
-            }
-            else
-            {
-                dp[i][j] = max(dp[i][j], max(dp[i-1][j-1] + triangle[i][j], dp[i-1][j] + triangle[i][j]));
-            }
+    int size = triangle.size();
+    vector<int> dp(triangle[size - 1]);
+
+    for (int i = size - 2; i >= 0; i--) {
+        for (int j = 0; j < triangle[i].size(); j++) {
+            // 현재 위치에서 바로 아래와 오른쪽 아래 중 최대값을 선택
+            dp[j] = max(dp[j], dp[j + 1]) + triangle[i][j];
         }
     }
-                   
-    for(int i = 0; i < size; i++)
-    {
-        answer = max(answer, dp[size -1][i]);
-    }
-                                               
-    return answer;                 
+    return dp[0];
 }
