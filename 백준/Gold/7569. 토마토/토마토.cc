@@ -22,60 +22,64 @@ struct pos
 	int x, y, z;
 };
 
-int arr[101][101][101];
-bool visited[101][101][101];
-
 int dx[] = { 1,-1,0,0,0,0 };
 int dy[] = { 0,0,1,-1,0,0 };
 int dz[] = { 0,0,0,0,1,-1 };
-int m, n, h, total;
-vector<pos> tomato1;
-vector<pos> tomato0;
+int m, n, h;
 
-int bfs()
+int bfs(vector<vector<vector<int>>>& arr)
 {
 	queue<pos> q;
-	for (pos pos : tomato1)
-	{
-		q.push({ pos.x, pos.y, pos.z});
-		visited[pos.x][pos.y][pos.z] = true;
-	}
 
-	int days = 0;
+	for (int k = 1; k <= h; k++)
+	{
+		for (int i = 1; i <= n; i++)
+		{
+			for (int j = 1; j <= m; j++)
+			{
+				if (arr[i][j][k] == 1)
+				{
+					q.push({ i,j,k });
+				}
+			}
+		}
+	}
 
 	while (!q.empty())
 	{
-		days++;
-		int size = q.size();
-		for (int i = 0; i < size; i++)
+		int cx = q.front().x;
+		int cy = q.front().y;
+		int cz = q.front().z;
+		q.pop();
+
+		for (int i = 0; i < 6; i++)
 		{
-			int cx = q.front().x;
-			int cy = q.front().y;
-			int cz = q.front().z;
-			q.pop();
+			int nx = cx + dx[i];
+			int ny = cy + dy[i];
+			int nz = cz + dz[i];
 
-			for (int i = 0; i < 6; i++)
-			{
-				int nx = cx + dx[i];
-				int ny = cy + dy[i];
-				int nz = cz + dz[i];
+			if (nx < 1 || nx > n || ny < 1 || ny > m || nz < 1 || nz > h) continue;
+			if (arr[nx][ny][nz] != 0) continue;
 
-				if (nx < 1 || nx > n || ny < 1 || ny > m || nz < 1 || nz > h) continue;
-				if (arr[nx][ny][nz] != 0 || visited[nx][ny][nz]) continue;
-
-				visited[nx][ny][nz];
-				arr[nx][ny][nz] = 1;
-				tomato1.push_back({ nx,ny,nz });
-				q.push({ nx,ny,nz });
-			}
-		}
-		if (tomato1.size() == total)
-		{
-			return days;
+			arr[nx][ny][nz] = arr[cx][cy][cz] + 1;
+			q.push({ nx,ny,nz });
 		}
 	}
 	
-	return -1;
+	int res = 0;
+	for (int k = 1; k <= h; k++)
+	{
+		for (int i = 1; i <= n; i++)
+		{
+			for (int j = 1; j <= m; j++)
+			{
+				if (arr[i][j][k] == 0) return -1;
+				res = max(res, arr[i][j][k]);
+			}
+		}
+	}
+
+	return res - 1;
 }
 
 int main()
@@ -86,6 +90,8 @@ int main()
 
 	cin >> m >> n >> h;
 	
+	vector<vector<vector<int>>> arr(n + 1, vector<vector<int>>(m + 1, vector<int>(h + 1, 0)));
+
 	for (int k = 1; k <= h; k++)
 	{
 		for (int i = 1; i <= n; i++)
@@ -93,28 +99,11 @@ int main()
 			for (int j = 1; j <= m; j++)
 			{
 				cin >> arr[i][j][k];
-				if (arr[i][j][k] == 1)
-				{
-					tomato1.push_back({ i,j,k });
-				}
-				else if (arr[i][j][k] == 0)
-				{
-					tomato0.push_back({ i,j,k });
-				}
 			}
 		}
 	}
 
-	total = tomato0.size() + tomato1.size();
-	if (tomato1.size() == total)
-	{
-		cout << 0;
-		return 0;
-	}
-	else
-	{
-		cout << bfs();
-	}
+	cout << bfs(arr);
 }
 
 
