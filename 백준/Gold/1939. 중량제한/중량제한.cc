@@ -44,7 +44,7 @@ void dijkstra(int start)
 
 			if (weight[next] < nextweight)
 			{
-				weight[next] = max(weight[next], nextweight);
+				weight[next] = nextweight;
 				pq.push({ weight[next], next });
 			}
 		}
