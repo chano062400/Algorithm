@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include "memory.h"
 #include <set>
+#include <unordered_set>
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <queue>
@@ -18,17 +19,7 @@
 using namespace std;
 
 int n, m, weights[31];
-bool dp[31][15001];
-
-void dfs(int index, int weight)
-{
-	if (index > n || dp[index][weight]) return;
-	dp[index][weight] = true;
-	
-	dfs(index + 1, weight + weights[index]);
-	dfs(index + 1, abs(weight - weights[index]));
-	dfs(index + 1, weight);
-}
+unordered_set<int> weight;
 
 int main()
 {
@@ -43,16 +34,40 @@ int main()
 		cin >> weights[i];
 	}
 
-	dfs(0, 0);
+	for (int i = 0; i < n; i++)
+	{
+		if (i > 0)
+		{
+			vector<int> temp;
+			for (auto it = weight.begin(); it != weight.end(); it++)
+			{
+				temp.push_back(*it);
+			}
+
+			for (int j = 0; j < temp.size(); j++)
+			{
+				int w1 = abs(weights[i] + temp[j]);
+				int w2 = abs(weights[i] - temp[j]);
+				weight.insert(w1);
+				weight.insert(w2);
+			}
+		}
+		weight.insert(weights[i]);
+	}
 
 	cin >> m;
 	for (int i = 0; i < m; i++)
 	{
 		int bead;
 		cin >> bead;
-		if (bead > 15000) cout << "N ";
-		else if (dp[n][bead]) cout << "Y ";
-		else cout << "N ";
+		if (weight.find(bead) != weight.end())
+		{
+			cout << "Y ";
+		}
+		else
+		{
+			cout << "N ";
+		}
 	}
 
 }
