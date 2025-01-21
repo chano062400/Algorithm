@@ -40,7 +40,6 @@ int main()
 		{
 			while (!st.empty() && ch > st.top())
 			{
-				if (st.empty()) break;
 				if (str.length() - i + st.size() == n - k)
 				{
 					temp = str.substr(i);
