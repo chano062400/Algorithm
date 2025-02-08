@@ -18,60 +18,40 @@
 #include <list>
 using namespace std;
 
-int n, m, res = 0;
-
-struct Trie
-{
-private:
-    map<char, Trie*> TrieNode;
-
-public:
-
-    void insert(const string& str, int index)
-    {
-        if (index == str.length()) return;
-
-        char ch = str[index];
-        if (TrieNode.find(ch) == TrieNode.end())
-        {
-            TrieNode[ch] = new Trie();
-        }
-        TrieNode[ch]->insert(str, index + 1);
-    }
-
-    void find(const string& str, int index)
-    {
-        if (index == str.length()) res++;
-
-        if (TrieNode.find(str[index]) != TrieNode.end())
-        {
-            TrieNode[str[index]]->find(str, index + 1);
-        }
-    }
-};
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
+
+    int n, m, res = 0;
     cin >> n >> m;
 
-    Trie* Root = new Trie();
+    vector<string> v(n, "");
     for (int i = 0; i < n; i++)
     {
-        string str;
-        cin >> str;
-        
-        Root->insert(str, 0);
+        cin >> v[i];
     }
-    
+
+    sort(v.begin(), v.end());
+
     for (int i = 0; i < m; i++)
     {
         string str;
         cin >> str;
-
-        Root->find(str, 0);
+        auto it = lower_bound(v.begin(), v.end(), str);
+        if (it == v.end()) continue;
+        
+        int idx = it - v.begin();
+        bool flag = true;
+        for (int j = 0; j < str.length(); j++)
+        {
+            if (v[idx][j] != str[j])
+            {
+                flag = false;
+                break;
+            }
+        }
+        if (flag) res++;
     }
-
     cout << res;
 }
