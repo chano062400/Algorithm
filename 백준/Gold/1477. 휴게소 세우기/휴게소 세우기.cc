@@ -52,7 +52,7 @@ int main() {
     int s = 1, e = 1000, res = 1000;
     while (s <= e)
     {
-        int mid = ceil((double(s) + double(e)) / double(2));
+        int mid = (s + e) / 2;
 
         int cnt = 0;
         for (int i = 0; i < dist.size(); i++)
