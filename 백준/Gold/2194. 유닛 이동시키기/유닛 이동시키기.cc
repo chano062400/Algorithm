@@ -23,6 +23,18 @@ bool visited[501][501];
 int dx[] = { 1,-1,0,0 };
 int dy[] = { 0,0,1,-1 };
 
+bool check(int nlbx, int nlby, int nrtx, int nrty)
+{
+    for (int x = nrtx; x <= nlbx; x++)
+    {
+        for (int y = nlby; y <= nrty; y++)
+        {
+            if (arr[x][y] == -1) return false;
+        }
+    }
+    return true;
+}
+
 int bfs(int sx, int sy, int elbx, int elby, int ertx, int erty)
 {
     queue<pair<int, int>> q;
@@ -50,20 +62,7 @@ int bfs(int sx, int sy, int elbx, int elby, int ertx, int erty)
             int nlby = clby + dy[i];
             bool flag = true;
             if (nrtx < 1 || nrtx > n || nrty < 1 || nrty > m || nlbx < 1 || nlbx > n || nlby < 1 || nlby > m) continue;
-            if (visited[nrtx][nrty]) continue;
-            for (int x = nrtx; x <= nlbx; x++)
-            {
-                for (int y = nlby; y <= nrty; y++)
-                {
-                    if (arr[x][y] == -1)
-                    {
-                        flag = false;
-                        break;
-                    }
-                }
-                if (!flag) break;
-            }
-            if (!flag) continue;
+            if (visited[nrtx][nrty] || !check(nlbx, nlby, nrtx, nrty)) continue;
             
             visited[nrtx][nrty] = true;
             arr[nrtx][nrty] = arr[crtx][crty] + 1;
