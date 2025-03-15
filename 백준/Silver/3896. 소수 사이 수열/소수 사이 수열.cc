@@ -46,7 +46,7 @@ int main()
         int num;
         cin >> num;
 
-        int n1 = 0, n2 = 0;
+        int n1 = num, n2 = num;
 
         if (isprime[num])
         {
@@ -54,23 +54,10 @@ int main()
             continue;
         }
 
-        for (int i = num; i >= 2; i--)
-        {
-            if (isprime[i])
-            {
-                n1 = i;
-                break;
-            }
-        }
-
-        for (int i = num; i <= MAX; i++)
-        {
-            if (isprime[i])
-            {
-                n2 = i;
-                break;
-            }
-        }
+        while (!isprime[n1])
+            n1--;
+        while (!isprime[n2])
+            n2++;
 
         cout << n2 - n1 << '\n';
     }
