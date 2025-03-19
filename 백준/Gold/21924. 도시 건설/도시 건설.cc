@@ -79,7 +79,7 @@ int main() {
     sort(v.begin(), v.end(), cmp);
     
     long long saving = 0;
-    bool flag = true;
+    int cnt = 1;
     for (int i = 0; i < v.size(); i++)
     {
         int a = v[i].second.first;
@@ -90,23 +90,10 @@ int main() {
         {
             Union(a, b);
             saving += c;
+
+            if (++cnt == n) break;
         }
     }
-
-    for (int i = 1; i <= n; i++)
-    {
-        parent[i] = parent[parent[i]];
-    }
-
-    int par = parent[1];
-    for (int i = 2; i <= n; i++)
-    {
-        if (parent[i] != par)
-        {
-            cout << -1;
-            return 0;
-        }
-    }
-
-    cout << total - saving;
+    
+    cnt == n ? cout << total - saving : cout << -1;
 }
