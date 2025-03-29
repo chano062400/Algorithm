@@ -53,7 +53,7 @@ int main() {
     sort(v.begin(), v.end(), cmp1);
 
     int start = 101, end = 301, res = 0, idx = 0;
-    while (end < 1201 && !v.empty())
+    while (end < 1131 && !v.empty())
     {
         vector<pair<int, int>> temp;
         for (int i = 0; i < v.size(); i++)
