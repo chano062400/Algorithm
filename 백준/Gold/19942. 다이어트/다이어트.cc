@@ -95,8 +95,6 @@ int main() {
     info temp = { 0,0,0,0,0 };
     vector<int> selected;
     dfs(0, temp, selected);
-
-    sort(resv.begin(), resv.end());
     
     if (res == MAX)
     {
