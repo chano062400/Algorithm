@@ -19,10 +19,10 @@
 using namespace std;
 
 int n, m, cnt = 0, maxextent = 0, maxremovewallextent = 0;
-int dx[] = { 1,-1,0,0 };
-int dy[] = { 0,0,1,-1 };
+int dx[] = { 0,-1,0,1 };
+int dy[] = { -1,0,1,0 };
 int area[51][51];
-bool arr[51][51][4];
+int arr[51][51];
 bool visited[51][51];
 map<int, int> roomextent;
 
@@ -46,7 +46,7 @@ void bfs(int x, int y)
 			int ny = cy + dy[i];
 
 			if (nx < 1 || nx > m || ny < 1 || ny > n) continue;
-            if (arr[cx][cy][i]) continue;
+            if (arr[cx][cy] & (1 << i)) continue;
 			if (visited[nx][ny]) continue;
 
 			visited[nx][ny] = true;
@@ -60,26 +60,6 @@ void bfs(int x, int y)
     maxextent = max(maxextent, sum);
 }
 
-int getnextroom(int x, int y, int dir)
-{
-    if (dir == 0)
-    {
-        return area[x + 1][y];
-    }
-    else if (dir == 1)
-    {
-        return area[x - 1][y];
-    }
-    else if (dir == 2)
-    {
-        return area[x][y + 1];
-    }
-    else
-    {
-        return area[x][y - 1];
-    }
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
@@ -90,31 +70,7 @@ int main() {
     {
         for (int j = 1; j <= n; j++)
         {
-            int num;
-            cin >> num;
-            while (num > 0)
-            {
-                if (num >= 8)
-                {
-                    num -= 8;
-                    arr[i][j][0] = true;
-                }
-                else if (num >= 4)
-                {
-                    num -= 4;
-                    arr[i][j][2] = true;
-                }
-                else if (num >= 2)
-                {
-                    num -= 2;
-                    arr[i][j][1] = true;
-                }
-                else
-                {
-                    num -= 1;
-                    arr[i][j][3] = true;
-                }
-            }
+            cin >> arr[i][j];
         }
     }
 
@@ -136,9 +92,12 @@ int main() {
         {
             for (int k = 0; k < 4; k++)
             {
-                if (arr[i][j][k])
+                if (arr[i][j] & (1 << k))
                 {
-                    int curroom = area[i][j], nextroom = getnextroom(i, j, k);
+                    int curroom = area[i][j], ni = i + dx[k], nj = j + dy[k];
+                    if (ni < 1 || ni > m || nj < 1 || nj > n) continue;
+
+                    int nextroom = area[ni][nj];
 					// 벽을 제거했을 때 다음 방이 현재 방과 다르다면 넓이를 더함.
 					if (curroom != nextroom)
 					{
