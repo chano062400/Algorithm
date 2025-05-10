@@ -23,8 +23,7 @@ int solution(vector<int> players, int m, int k) {
             if(allowplayers >= num) continue;
             
             // 서버 증설 횟수
-            int cnt = (num - allowplayers) / m;
-            cout << num << " " << allowplayers << " " << cnt << '\n';
+            int cnt = ceil((num - allowplayers) / m);
             while(cnt--)
             {
                 pq.push({i, i + k - 1});
